@@ -1154,10 +1154,159 @@ body {
     transform: scale(0.95);
 }
 
-.audio-btn.playing {
-    background: linear-gradient(135deg, #EF5350, #E53935);
-    animation: pulse 1s infinite;
-}
+    .audio-btn.playing {
+        background: linear-gradient(135deg, #EF5350, #E53935);
+        animation: pulse 1s infinite;
+    }
+
+    body.nav-open {
+        overflow: hidden;
+    }
+
+    .cover-page,
+    .toc-page,
+    .unit-page,
+    .footer-page {
+        scroll-margin-top: 16px;
+    }
+
+    .floating-nav {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 2500;
+    }
+
+    .nav-toggle {
+        width: 52px;
+        height: 52px;
+        border: 1px solid var(--ui-border);
+        border-radius: 16px;
+        background: var(--ui-card);
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex-direction: column;
+        cursor: pointer;
+    }
+
+    .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        border-radius: 2px;
+        background: #4F7D77;
+    }
+
+    .nav-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: 2400;
+    }
+
+    .nav-drawer {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        width: min(320px, calc(100vw - 32px));
+        max-height: calc(100vh - 32px);
+        padding: 16px;
+        border-radius: 20px;
+        background: var(--ui-card);
+        border: 1px solid var(--ui-border);
+        box-shadow: 0 20px 60px rgba(17, 24, 39, 0.18);
+        transform: translateX(-110%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.24s ease, opacity 0.24s ease;
+        z-index: 2501;
+        overflow: auto;
+    }
+
+    body.nav-open .nav-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    body.nav-open .nav-drawer {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .nav-drawer-title {
+        font-size: 16pt;
+        font-weight: bold;
+        color: #4F7D77;
+    }
+
+    .nav-close {
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--ui-border);
+        border-radius: 50%;
+        background: #fff;
+        color: #4F7D77;
+        cursor: pointer;
+    }
+
+    .nav-quicklinks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .nav-pill {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(167, 228, 211, 0.18);
+        color: #4F7D77;
+        text-decoration: none;
+        font-size: 10pt;
+    }
+
+    .nav-list {
+        display: grid;
+        gap: 8px;
+    }
+
+    .nav-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        text-decoration: none;
+        color: #395B57;
+        background: rgba(244, 247, 246, 0.9);
+        border: 1px solid rgba(167, 228, 211, 0.24);
+    }
+
+    .nav-item span {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .nav-item small {
+        color: var(--ui-muted);
+        white-space: nowrap;
+    }
 
 @keyframes pulse {
     0%, 100% { box-shadow: 0 3px 10px rgba(239,83,80,0.3); }
@@ -1297,6 +1446,12 @@ body {
     /* ========== 隐藏元素 ========== */
     .audio-btn {
         display: none;
+    }
+
+    .floating-nav,
+    .nav-backdrop,
+    .nav-drawer {
+        display: none !important;
     }
 
     .toc-item-link {
@@ -2138,6 +2293,10 @@ body {
         min-width: 0;
     }
 
+    .nav-drawer {
+        width: min(320px, calc(100vw - 24px));
+    }
+
     .week-row {
         grid-template-columns: 1fr;
         gap: 6px;
@@ -2265,6 +2424,27 @@ body {
     .song-card {
         max-width: 100%;
     }
+
+    .floating-nav {
+        top: 12px;
+        left: 12px;
+    }
+
+    .nav-toggle {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+    }
+
+    .nav-drawer {
+        top: 12px;
+        left: 12px;
+        width: calc(100vw - 24px);
+    }
+
+    .nav-drawer-title {
+        font-size: 14pt;
+    }
 }
 
 </style>
@@ -2272,6 +2452,7 @@ body {
 // 音频播放功能
 let currentAudio = null;
 let currentButton = null;
+let navReady = false;
 
 function playAudio(button, audioPath) {
     // 如果点击的是当前正在播放的按钮，则暂停
@@ -2311,12 +2492,82 @@ function playAudio(button, audioPath) {
         currentButton = null;
     };
 }
+
+function initUnitNav() {
+    if (navReady) return;
+
+    const toggle = document.getElementById('navToggle');
+    const drawer = document.getElementById('unitNavDrawer');
+    const backdrop = document.getElementById('navBackdrop');
+    const closeBtn = document.getElementById('navClose');
+
+    if (!toggle || !drawer || !backdrop || !closeBtn) return;
+
+    const setOpen = (open) => {
+        document.body.classList.toggle('nav-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        drawer.setAttribute('aria-hidden', String(!open));
+    };
+
+    toggle.addEventListener('click', () => {
+        setOpen(!document.body.classList.contains('nav-open'));
+    });
+
+    backdrop.addEventListener('click', () => setOpen(false));
+    closeBtn.addEventListener('click', () => setOpen(false));
+    drawer.addEventListener('click', (event) => {
+        if (event.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setOpen(false);
+    });
+
+    navReady = true;
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initUnitNav);
+} else {
+    initUnitNav();
+}
 </script>
 </head>
 <body>
 
+<div class="floating-nav">
+    <button type="button" id="navToggle" class="nav-toggle" aria-label="打开单元导航" aria-expanded="false" aria-controls="unitNavDrawer">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div id="navBackdrop" class="nav-backdrop"></div>
+    <aside id="unitNavDrawer" class="nav-drawer" aria-hidden="true">
+        <div class="nav-drawer-header">
+            <div class="nav-drawer-title">单元导航</div>
+            <button type="button" id="navClose" class="nav-close" aria-label="关闭导航">✕</button>
+        </div>
+        <div class="nav-quicklinks">
+            <a href="#home" class="nav-pill">首页</a>
+            <a href="#toc" class="nav-pill">目录</a>
+            <a href="#footer" class="nav-pill">底部</a>
+        </div>
+        <div class="nav-list">
+            <a href="#unit0" class="nav-item"><span>Unit 0 · ABC Adventure</span><small>字母</small></a>
+            <a href="#unit1" class="nav-item"><span>Unit 1 · Hello, Me!</span><small>身体</small></a>
+            <a href="#unit2" class="nav-item"><span>Unit 2 · Yummy Food!</span><small>食物</small></a>
+            <a href="#unit3" class="nav-item"><span>Unit 3 · Animal Friends</span><small>动物</small></a>
+            <a href="#unit4" class="nav-item"><span>Unit 4 · Color My World</span><small>颜色</small></a>
+            <a href="#unit5" class="nav-item"><span>Unit 5 · My Happy Family</span><small>家庭</small></a>
+            <a href="#unit6" class="nav-item"><span>Unit 6 · I Can Jump!</span><small>动作</small></a>
+            <a href="#unit7" class="nav-item"><span>Unit 7 · My Toys</span><small>玩具</small></a>
+            <a href="#unit8" class="nav-item"><span>Unit 8 · Good Night!</span><small>日夜</small></a>
+        </div>
+    </aside>
+</div>
+
 <!-- 封面 -->
-<div class="cover-page">
+<div class="cover-page" id="home">
     <div class="cover-decoration top">🌟✨🌈🎈🎨🎵📚🐾</div>
     <div class="cover-content">
         <div class="cover-icon">🧸🐰🐻🦉</div>
@@ -2329,7 +2580,7 @@ function playAudio(button, audioPath) {
 </div>
 
 <!-- 目录 -->
-<div class="toc-page">
+<div class="toc-page" id="toc">
     <h2 class="toc-title">📖 目录 Table of Contents</h2>
     <div class="toc-list">
         <a href="#unit0" class="toc-item-link">
@@ -7868,7 +8119,7 @@ function playAudio(button, audioPath) {
     </section>
 </div>
 
-<div class="footer-page">
+<div class="footer-page" id="footer">
     <p>🧸 Little Explorers: Starter Level 小小探索者英语启蒙教材</p>
     <p class="footer-sub">Happy Learning! 快乐学习，快乐成长！ 🌟</p>
 </div>
