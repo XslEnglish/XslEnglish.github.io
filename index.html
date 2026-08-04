@@ -1961,6 +1961,312 @@ body {
     color: #4F7D77;
 }
 
+@media (max-width: 1024px) {
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    .cover-page,
+    .toc-page,
+    .unit-page {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .goal-grid,
+    .vocab-grid,
+    .phonics-grid,
+    .cvc-grid,
+    .alphabet-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vocab-top,
+    .sentence-group-header,
+    .story-title-row,
+    .alphabet-section-header {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .cover-page {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: 36px 20px;
+    }
+
+    .cover-decoration {
+        font-size: 18pt;
+        letter-spacing: 6px;
+    }
+
+    .cover-title {
+        font-size: clamp(26px, 8vw, 34px);
+        line-height: 1.1;
+    }
+
+    .cover-subtitle {
+        font-size: clamp(16px, 5vw, 22px);
+    }
+
+    .cover-level {
+        padding: 10px 24px;
+        font-size: 14pt;
+    }
+
+    .toc-page,
+    .unit-page {
+        padding: 24px 16px 40px;
+    }
+
+    .unit-header {
+        padding: 22px 18px;
+    }
+
+    .unit-badge,
+    .unit-theme {
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .unit-title {
+        font-size: clamp(24px, 6.5vw, 34px);
+        line-height: 1.15;
+    }
+
+    .unit-subtitle {
+        font-size: clamp(15px, 4.6vw, 21px);
+        line-height: 1.35;
+    }
+
+    .section {
+        padding: 20px 16px;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 16pt;
+        margin-bottom: 18px;
+    }
+
+    .goal-grid,
+    .vocab-grid,
+    .phonics-grid,
+    .cvc-grid,
+    .alphabet-grid {
+        gap: 12px;
+    }
+
+    .mission-grid,
+    .can-do-list {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-card {
+        align-items: flex-start;
+    }
+
+    .vocab-en,
+    .letter-word,
+    .story-title,
+    .song-title,
+    .toc-name,
+    .toc-theme {
+        line-height: 1.3;
+    }
+
+    .story-line,
+    .dialogue-line {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .story-role,
+    .dialogue-speaker {
+        min-width: 0;
+        align-self: flex-start;
+    }
+
+    .story-content,
+    .lyric-line {
+        display: block;
+    }
+
+    .story-content,
+    .song-lyrics,
+    .week-focus,
+    .mission span,
+    .dlg-en,
+    .dlg-cn,
+    .story-en,
+    .story-cn,
+    .lyric-en,
+    .lyric-cn {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .song-header,
+    .vocab-top,
+    .sentence-group-header,
+    .story-title-row,
+    .alphabet-section-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .song-header > *,
+    .vocab-top > *,
+    .sentence-group-header > *,
+    .story-title-row > *,
+    .alphabet-section-header > * {
+        min-width: 0;
+    }
+
+    .week-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        min-height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .cover-page,
+    .toc-page,
+    .unit-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .cover-icon {
+        font-size: 46pt;
+    }
+
+    .cover-title {
+        font-size: 26pt;
+    }
+
+    .cover-subtitle {
+        font-size: 16pt;
+    }
+
+    .toc-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 14px 16px;
+    }
+
+    .toc-num {
+        min-width: 0;
+    }
+
+    .toc-item {
+        overflow-wrap: anywhere;
+    }
+
+    .goal-grid,
+    .vocab-grid,
+    .phonics-grid,
+    .cvc-grid,
+    .alphabet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-card,
+    .vocab-card,
+    .phonics-card,
+    .cvc-card,
+    .letter-card,
+    .story-card,
+    .song-card,
+    .dialogue-box {
+        padding: 12px;
+    }
+
+    .letter-card {
+        min-height: auto;
+    }
+
+    .letter-pair span:first-child {
+        font-size: 24pt;
+    }
+
+    .letter-pair span:last-child {
+        font-size: 18pt;
+    }
+
+    .letter-picture {
+        font-size: 28pt;
+    }
+
+    .unit-badge,
+    .unit-theme,
+    .page-kicker,
+    .toc-theme,
+    .week-focus,
+    .letter-action,
+    .letter-note,
+    .vocab-action,
+    .vocab-chant,
+    .story-action,
+    .footer-page p,
+    .unit-footer {
+        font-size: 10pt;
+    }
+
+    .unit-title {
+        font-size: 22pt;
+    }
+
+    .unit-subtitle,
+    .song-title,
+    .story-title,
+    .section-title,
+    .toc-name {
+        font-size: 14pt;
+    }
+
+    .audio-btn-small {
+        width: 32px;
+        height: 32px;
+        font-size: 12pt;
+    }
+
+    .audio-btn-medium {
+        width: 38px;
+        height: 38px;
+        font-size: 15pt;
+    }
+
+    .footer-page {
+        padding: 36px 16px;
+    }
+
+    .cover-content,
+    .unit-header,
+    .section,
+    .story-card,
+    .song-card {
+        max-width: 100%;
+    }
+}
+
 </style>
 <script>
 // 音频播放功能
